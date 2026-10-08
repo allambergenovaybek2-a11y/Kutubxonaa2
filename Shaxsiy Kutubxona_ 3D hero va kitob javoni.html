@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shaxsiy Kutubxona</title>
+<style>
+:root{--bg:#0B0B12;--fg:#F3F1FA;--mut:#9A98AE;--glass:rgba(255,255,255,.07);--bd:rgba(255,255,255,.14);--a:#6C5CE7;--b:#00B4D8;--gold:#F5B942;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#F4F2FB;--fg:#1B1930;--mut:#5F5C78;--glass:rgba(255,255,255,.65);--bd:rgba(0,0,0,.1)}}
+:root[data-theme="light"]{--bg:#F4F2FB;--fg:#1B1930;--mut:#5F5C78;--glass:rgba(255,255,255,.65);--bd:rgba(0,0,0,.1)}
+:root[data-theme="dark"]{--bg:#0B0B12;--fg:#F3F1FA;--mut:#9A98AE;--glass:rgba(255,255,255,.07);--bd:rgba(255,255,255,.14)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(ellipse at 70% 30%,rgba(108,92,231,.35),transparent 60%),radial-gradient(ellipse at 20% 90%,rgba(0,180,216,.2),transparent 55%),var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-serif;overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 28px;z-index:3}
+.logo{font-family:Sora,Georgia,serif;font-weight:700;letter-spacing:.02em}
+.logo b{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+.glass{background:var(--glass);border:1px solid var(--bd);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:20px}
+.chip{padding:8px 14px;border-radius:999px}
+.hero{position:fixed;left:6vw;top:50%;transform:translateY(-55%);z-index:2;max-width:min(480px,88vw);pointer-events:none;transition:opacity .4s}
+.hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;margin:0 0 16px}
+.hero h1 span{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);line-height:1.6;margin:0 0 22px}
+.cta{pointer-events:auto;border:0;padding:13px 24px;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--b));color:#fff;font-weight:600;transition:transform .2s,box-shadow .2s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(108,92,231,.5)}
+.sel .hero{opacity:0}
+#panel{position:fixed;left:5vw;bottom:calc(5vh + env(safe-area-inset-bottom,0px));width:min(380px,90vw);padding:22px;z-index:4;transform:translateY(30px);opacity:0;pointer-events:none;transition:.45s}
+.sel #panel{transform:none;opacity:1;pointer-events:auto}
+#panel h2{font-family:'Playfair Display',Georgia,serif;margin:6px 0 4px;font-size:1.6rem}
+.tag{font-size:.75rem;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
+#panel p{color:var(--mut);line-height:1.55;font-size:.92rem}
+.row{display:flex;gap:10px;margin-top:14px}
+.row button{flex:1;padding:11px;border-radius:14px;border:1px solid var(--bd);background:var(--glass)}
+.row .pri{background:linear-gradient(90deg,var(--a),var(--b));border:0;color:#fff;font-weight:600}
+#hint{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));right:24px;color:var(--mut);font-size:.8rem;z-index:2}
+#grid{display:none;position:fixed;inset:0;overflow:auto;padding:90px 24px 40px;z-index:1;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;align-content:start}
+.fb #grid{display:grid}.fb .hero{position:static;transform:none;grid-column:1/-1;max-width:none;pointer-events:auto}
+.card{padding:16px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:16px;color:#fff}
+.card small{opacity:.8}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:5;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>")}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&family=Sora:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <div class="logo">📚 Shaxsiy <b>Kutubxona</b></div>
+  <button class="glass chip" id="theme" aria-label="Mavzuni almashtirish">◐ Mavzu</button>
+</header>
+<section class="hero" id="hero">
+  <h1>Sizning <span>shaxsiy</span> kutubxonangiz</h1>
+  <p>Kitoblaringiz uch o'lchamli javonda. Kitob ustiga boring, bosing va uni har tomondan aylantirib ko'ring.</p>
+  <button class="cta" id="cta">Javonni kashf etish ↓</button>
+</section>
+<div id="grid" aria-label="Kitoblar ro'yxati"></div>
+<aside id="panel" class="glass" aria-live="polite">
+  <div class="tag" id="pg"></div><h2 id="pt"></h2>
+  <div style="font-size:.9rem" id="pa"></div><p id="pd"></p>
+  <div class="row"><button class="pri">O'qish</button><button id="close">Yopish</button></div>
+</aside>
+<div id="hint">Sichqoncha: parallaks · Bosish: kitobni ochish · Esc: yopish</div>
+<div class="grain"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const BOOKS=[
+["O'tkan kunlar","Abdulla Qodiriy","Badiiy","#8E2C48","O'zbek adabiyotining birinchi yirik romani: Otabek va Kumushning muhabbat qissasi."],
+["Mehrobdan chayon","Abdulla Qodiriy","Tarixiy","#2F5D50","Xonlik davri fojialari va insoniy taqdirlar haqida roman."],
+["Xamsa","Alisher Navoiy","Klassika","#B8862B","Besh dostondan iborat buyuk turkiy epik asar."],
+["Boburnoma","Zahiriddin Bobur","Tarix","#3B4F8A","Bobur xotiralari: tarix, tabiat va shaxsiy kechinmalar."],
+["Sapiens","Yuval Noah Harari","Tarix","#C8553D","Insoniyatning qisqacha tarixi."],
+["Kichkina shahzoda","A. de Sent-Ekzyuperi","Badiiy","#2A7F9E","Do'stlik, sevgi va mas'uliyat haqida falsafiy ertak."],
+["Clean Code","Robert C. Martin","Texnologiya","#1F2A44","Toza va o'qilishi oson kod yozish san'ati."],
+["Yuz yillik yolg'izlik","G. Garsia Markes","Badiiy","#6B3FA0","Buendia oilasining yetti avlodi haqida sehrli realizm."],
+["Dune","Frank Herbert","Fantastika","#D98E2B","Cho'l sayyorasi Arrakisdagi hokimiyat va omon qolish kurashi."],
+["Vaqtning qisqacha tarixi","Stiven Xoking","Ilmiy","#14597A","Koinot, qora tuynuklar va vaqt tabiati haqida."],
+["Alkimyogar","Paulo Koelo","Badiiy","#A8442F","Cho'pon Santyagoning orzusi sari sayohati."],
+["Pragmatik dasturchi","Hunt va Thomas","Texnologiya","#2D6A4F","Dasturchi kasbining amaliy maslahatlari."]];
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let gl=true;try{const c=document.createElement('canvas');gl=!!(c.getContext('webgl')||c.getContext('experimental-webgl'))}catch(e){gl=false}
+$('theme').onclick=()=>{const r=document.documentElement,d=r.dataset.theme==='dark'||(!r.dataset.theme&&!matchMedia('(prefers-color-scheme:light)').matches);r.dataset.theme=d?'light':'dark'};
+$('cta').onclick=()=>{if(!gl||reduce)document.getElementById('grid').scrollIntoView({behavior:'smooth'})};
+
+if(!gl||reduce){ // 2D fallback
+  document.body.classList.add('fb');document.body.style.overflow='auto';
+  $('hint').style.display='none';
+  $('grid').insertBefore($('hero'),null);
+  BOOKS.forEach(b=>{const d=document.createElement('div');d.className='card';d.style.background=b[3];d.innerHTML=`<small>${b[2]}</small><b>${b[0]}</b><small>${b[1]}</small>`;$('grid').appendChild(d)});
+}else{
+const W=()=>innerWidth,H=()=>innerHeight;
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(W(),H());
+renderer.shadowMap.enabled=true;document.body.prepend(renderer.domElement);
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(40,W()/H(),.1,100);cam.position.set(0,.3,8);
+scene.add(new THREE.AmbientLight(0xffffff,.5));
+const lamp=new THREE.PointLight(0xffc773,1.1,18);lamp.position.set(-2,3,4);scene.add(lamp);
+const dl=new THREE.DirectionalLight(0xaab4ff,.6);dl.position.set(3,5,6);dl.castShadow=true;dl.shadow.mapSize.set(1024,1024);scene.add(dl);
+
+const shelf=new THREE.Group();scene.add(shelf);
+const wood=new THREE.MeshStandardMaterial({color:0x3a2a20,roughness:.7});
+function box(w,h,d,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),wood);m.position.set(x,y,z);m.receiveShadow=true;m.castShadow=true;shelf.add(m)}
+const SW=5.4;
+box(SW,.12,1.5,0,-1.2,0);box(SW,.12,1.5,0,.9,0);box(SW,.12,1.5,0,3.0,0);
+box(.12,4.3,1.5,-SW/2,.9,0);box(.12,4.3,1.5,SW/2,.9,0);box(SW,4.3,.1,0,.9,-.7);
+
+function tex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.anisotropy=4;return new THREE.MeshStandardMaterial({map:t,roughness:.6})}
+function wrap(g,t,x,y,mw,lh){const ws=t.split(' ');let l='';for(const w of ws){if(g.measureText(l+w).width>mw&&l){g.fillText(l,x,y);y+=lh;l=''}l+=w+' '}g.fillText(l,x,y)}
+const items=[];
+const rows=[[0,5],[6,11]];
+rows.forEach((r,ri)=>{
+  const dims=[];let tot=0;
+  for(let i=r[0];i<=r[1];i++){const t=.34+((i*37)%5)*.045,h=1.55+((i*53)%4)*.1;dims.push([t,h]);tot+=t+.05}
+  let x=-tot/2;const base=ri?.96:-1.14;
+  for(let i=r[0];i<=r[1];i++){
+    const [t,h]=dims[i-r[0]],b=BOOKS[i],col=b[3],d=1.1;
+    const spine=tex(128,512,(g,w,hh)=>{g.fillStyle=col;g.fillRect(0,0,w,hh);g.fillStyle='rgba(255,255,255,.18)';g.fillRect(0,40,w,6);g.fillRect(0,hh-46,w,6);g.fillStyle='#fff';g.font='bold 34px Georgia';g.translate(w/2,hh/2);g.rotate(-Math.PI/2);g.textAlign='center';g.textBaseline='middle';g.fillText(b[0].length>20?b[0].slice(0,19)+'…':b[0],0,0)});
+    const cover=tex(360,512,(g,w,hh)=>{const gr=g.createLinearGradient(0,0,w,hh);gr.addColorStop(0,col);gr.addColorStop(1,'#111');g.fillStyle=gr;g.fillRect(0,0,w,hh);g.strokeStyle='#F5B942';g.lineWidth=3;g.strokeRect(22,22,w-44,hh-44);g.fillStyle='#fff';g.textAlign='center';g.font='bold 40px Georgia';wrap(g,b[0],w/2,170,w-90,50);g.fillStyle='#F5B942';g.font='24px Inter,sans-serif';g.fillText(b[1],w/2,hh-70)});
+    const back=new THREE.MeshStandardMaterial({color:col,roughness:.7}),pg=new THREE.MeshStandardMaterial({color:0xf2ead8,roughness:.9});
+    const m=new THREE.Mesh(new THREE.BoxGeometry(t,h,d),[cover,back,pg,pg,spine,pg]);
+    m.castShadow=true;m.position.set(x+t/2,base+h/2,.1);
+    m.userData={i,home:m.position.clone(),b};
+    shelf.add(m);items.push(m);x+=t+.05;
+  }
+});
+
+// changlar
+const N=300,pp=new Float32Array(N*3);for(let i=0;i<N*3;i++)pp[i]=(Math.random()-.5)*16;
+const pgeo=new THREE.BufferGeometry();pgeo.setAttribute('position',new THREE.BufferAttribute(pp,3));
+const dust=new THREE.Points(pgeo,new THREE.PointsMaterial({color:0xffd9a0,size:.03,transparent:true,opacity:.7}));scene.add(dust);
+
+let sel=null,hov=null,mx=0,my=0;
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(9,9);
+function layout(){const w=W()<800;shelf.position.set(w?0:1.7,w?-.4:-.2,0);const s=w?Math.min(1,W()/560):1;shelf.scale.setScalar(s);cam.aspect=W()/H();cam.updateProjectionMatrix();renderer.setSize(W(),H())}
+layout();addEventListener('resize',layout);
+addEventListener('pointermove',e=>{mouse.set(e.clientX/W()*2-1,-(e.clientY/H())*2+1);mx=mouse.x;my=mouse.y});
+addEventListener('click',e=>{
+  if(e.target.closest('#panel,header,.cta'))return;
+  ray.setFromCamera(mouse,cam);const h=ray.intersectObjects(items)[0];
+  if(sel){close();return}
+  if(h)open(h.object)});
+function open(m){sel=m;const b=m.userData.b;$('pg').textContent=b[2];$('pt').textContent=b[0];$('pa').textContent=b[1];$('pd').textContent=b[4];document.body.classList.add('sel')}
+function close(){sel=null;document.body.classList.remove('sel')}
+$('close').onclick=close;addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+$('cta').onclick=()=>{close();tz=1};let tz=0;
+
+const clock=new THREE.Clock();
+(function loop(){
+  requestAnimationFrame(loop);
+  const t=clock.getElapsedTime();
+  cam.position.x+=(mx*.6-cam.position.x)*.05;cam.position.y+=(.3+my*.4-cam.position.y)*.05;cam.lookAt(0,.4,0);
+  lamp.intensity=1.05+Math.sin(t*2)*.05;
+  dust.rotation.y=t*.02;dust.position.y=Math.sin(t*.3)*.15;
+  if(!sel){ray.setFromCamera(mouse,cam);const h=ray.intersectObjects(items)[0];hov=h?h.object:null;document.body.style.cursor=hov?'pointer':'default'}
+  items.forEach(m=>{
+    const u=m.userData;let tp=u.home.clone(),ry=0,s=1;
+    if(m===sel){const lx=(0-shelf.position.x)/shelf.scale.x,ly=(.2-shelf.position.y)/shelf.scale.x;tp.set(lx,ly,3.2);ry=-Math.PI/2+Math.sin(t*.8)*.5;s=1.7}
+    else if(m===hov){tp.z+=.45;ry=-.35}
+    else if(sel){tp.z-=.1}
+    m.position.lerp(tp,.12);m.rotation.y+=(ry-m.rotation.y)*.12;
+    m.scale.setScalar(m.scale.x+(s-m.scale.x)*.12);
+  });
+  renderer.render(scene,cam);
+})();
+}
+</script>
+</body>
+</html>
